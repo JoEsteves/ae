@@ -35,6 +35,8 @@ public:
 	friend ostream& operator<< (ostream &out,const Funcionario &func);
 	string imprime();
 
+	void adicionaVeiculo(Veiculo * v);
+	void removeVeiculo(int indice);
 	bool sabe(){
 		return false;
 	}

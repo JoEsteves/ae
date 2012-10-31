@@ -5,7 +5,13 @@
 Empresa::Empresa() {
 	leClientes();
 	leFuncionarios();
-	distribui();
+
+	leBuses();
+	leCamioes();
+	leCarros();
+
+	distribuiPessoas();
+	distribuiVeiculos();
 }
 
 Empresa::~Empresa() {
@@ -20,7 +26,7 @@ void Empresa::clear() {
 
 void Empresa::pause() {
 	cout << "prima qualquer tecla para continuar" << endl;
-	cin.get();
+	cin.ignore(1000, '\n');
 	cin.get();
 }
 
@@ -78,27 +84,37 @@ void Empresa::novoCliente(Cliente * c) {
 
 }
 
-void Empresa::novoVeiculo(Veiculo * v) {
-	veiculos.push_back(v);
-}
-
 void Empresa::removeFuncionario(int i) {
 	funcionarios.erase(funcionarios.begin() + i);
 }
 
-/*
- void Empresa::removeVeiculo(Veiculo * v){
+void Empresa::removeCliente(int indice) {
+	clientes.erase(clientes.begin() + indice);
+}
 
- vector<Veiculo*>::iterator it;
+void Empresa::novoCarro(Carro *c) {
+	carros.push_back(c);
+}
 
- for(it = veiculos.begin(); it != veiculos.end(); it++){
- if((*it)->getID() == v->getID()){
- it = veiculos.erase(it);
- }
- }
- }
+void Empresa::novoCamiao(Camiao *c) {
+	camioes.push_back(c);
+}
 
- */
+void Empresa::novoBus(Bus *b) {
+	buses.push_back(b);
+}
+
+void Empresa::removeCarro(int indice) {
+	carros.erase(carros.begin() + indice);
+}
+
+void Empresa::removeCamiao(int indice) {
+	camioes.erase(camioes.begin() + indice);
+}
+
+void Empresa::removeBus(int indice) {
+	buses.erase(buses.begin() + indice);
+}
 
 void Empresa::leCarros() {
 	fstream file;
@@ -108,6 +124,7 @@ void Empresa::leCarros() {
 	if (file.is_open()) {
 		while (!file.eof()) {
 			getline(file, brand);
+			if(brand==" ") exit(-1);
 			getline(file, model);
 			getline(file, lp);
 			getline(file, tip);
@@ -127,6 +144,7 @@ void Empresa::leBuses() {
 	if (file.is_open()) {
 		while (!file.eof()) {
 			getline(file, brand);
+			if(brand==" ") return;
 			getline(file, model);
 			getline(file, lp);
 
@@ -145,6 +163,7 @@ void Empresa::leCamioes() {
 	if (file.is_open()) {
 		while (!file.eof()) {
 			getline(file, brand);
+			if(brand==" ") return;
 			getline(file, model);
 			getline(file, lp);
 			getline(file, cat);
@@ -162,13 +181,15 @@ void Empresa::escreveCarros() {
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < carros.size(); i++) {
-			filestr << carros[i]->getMarca() << endl;
+			if(i!=0){
+				filestr << carros[i]->getMarca() << endl;
 			filestr << carros[i]->getModelo() << endl;
 			filestr << carros[i]->getMatricula() << endl;
 			filestr << carros[i]->getTipo();
 
 			if (i != veiculos.size() - 1) {
 				filestr << endl;
+			}
 			}
 		}
 		filestr.close();
@@ -182,12 +203,14 @@ void Empresa::escreveBuses() {
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < buses.size(); i++) {
+			if(i!=0){
 			filestr << buses[i]->getMarca() << endl;
 			filestr << buses[i]->getModelo() << endl;
 			filestr << buses[i]->getMatricula();
 
 			if (i != buses.size() - 1) {
 				filestr << endl;
+			}
 			}
 		}
 		filestr.close();
@@ -201,6 +224,7 @@ void Empresa::escreveCamioes() {
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < camioes.size(); i++) {
+			if(i!=0){
 			filestr << camioes[i]->getMarca() << endl;
 			filestr << camioes[i]->getModelo() << endl;
 			filestr << camioes[i]->getMatricula() << endl;
@@ -209,6 +233,7 @@ void Empresa::escreveCamioes() {
 			if (i != camioes.size() - 1) {
 				filestr << endl;
 			}
+		}
 		}
 		filestr.close();
 	} else
@@ -230,6 +255,7 @@ void Empresa::leClientes() {
 	if (ficheiro.is_open()) {
 		while (!ficheiro.eof()) {
 			getline(ficheiro, nome);
+			if(nome==" ") return;
 			getline(ficheiro, contacto);
 			getline(ficheiro, morada);
 
@@ -256,6 +282,7 @@ void Empresa::leFuncionarios() {
 		while (!ficheiro.eof()) {
 
 			getline(ficheiro, nome);
+			if(nome==" ") return;
 			getline(ficheiro, contacto);
 			getline(ficheiro, morada);
 			getline(ficheiro, tipo);
@@ -284,12 +311,26 @@ void Empresa::leFuncionarios() {
 
 }
 
-void Empresa::distribui() {
+void Empresa::distribuiPessoas() {
 	for (unsigned int i = 0; i < clientes.size(); i++) {
 		pessoas.push_back(clientes[i]);
 	}
 	for (unsigned int i = 0; i < funcionarios.size(); i++) {
 		pessoas.push_back(funcionarios[i]);
+	}
+}
+
+void Empresa::distribuiVeiculos() {
+	for (unsigned int i = 0; i < carros.size(); i++) {
+		veiculos.push_back(carros[i]);
+	}
+
+	for (unsigned int i = 0; i < camioes.size(); i++) {
+		veiculos.push_back(camioes[i]);
+	}
+
+	for (unsigned int i = 0; i < buses.size(); i++) {
+		veiculos.push_back(buses[i]);
 	}
 }
 
@@ -398,6 +439,8 @@ void Empresa::menu() {
 
 			case 3: {
 
+				modificaFunc();
+
 			}
 				break;
 
@@ -460,7 +503,7 @@ void Empresa::menu() {
 						cout << "Cliente adicionado" << endl;
 						pause();
 					} else {
-						cout << "Deseja insirir os dados de novo?" << endl;
+						cout << "Deseja inserir os dados de novo?" << endl;
 						cout << "nao-----------1" << endl;
 						cout << "sim-----------2" << endl;
 						cin >> confirmacao;
@@ -470,25 +513,66 @@ void Empresa::menu() {
 				} while (confirmacao != 1);
 
 			}
+
+				break;
+			case 2: {
+
+				clear();
+				int numeracao, conf;
+				for (unsigned int i = 0; i < clientes.size(); i++) {
+					cout << i + 1 << "   " << clientes[i]->getNome() << endl;
+				}
+
+				cout << "Qual dos clientes deseja eliminar?" << endl;
+				cin >> numeracao;
+
+				clear();
+				cout << *(clientes[numeracao - 1]) << endl;
+				cout << "Tem a certeza que quer apagar este cliente?" << endl;
+				cout << "Sim --------------------------------------------1"
+						<< endl;
+				cout << "Nao --------------------------------------------2"
+						<< endl;
+				cin >> conf;
+				if (conf == 1) {
+					removeCliente(numeracao - 1);
+					cout << "Cliente apagado do sistema" << endl;
+					pause();
+				}
+			}
+				break;
+
+			case 3: {
+				modificaCli();
+			}
+				break;
+
+			case 4: {
+				clear();
+				int opcao;
+				for (unsigned int i = 0; i < clientes.size(); i++) {
+					cout << i + 1 << "  " << clientes[i]->getNome() << endl;
+				}
+				cout << "Qual o cliente que deseja analisar?" << endl;
+				cin >> opcao;
+				cout << *(clientes[opcao - 1]) << endl;
+				pause();
+			}
+				break;
 			}
 		}
 			break;
-		case 3: {
-		//TODO ver porque que nao entra no case 3
-			modifica();
-			cin.get();
-			cin.get();
 
-		}
-			break;
+		case 3: { //Menu Veiculos
+			menuVeiculos();
+		}break;
 
-		case 4: {
-
-		}
-			break;
 		case 0: {
 			escreveClientes();
 			escreveFuncionarios();
+			escreveBuses();
+			escreveCamioes();
+			escreveCarros();
 			op = 0;
 		}
 			break;
@@ -497,7 +581,7 @@ void Empresa::menu() {
 	} while (op != 0);
 }
 
-void Empresa::modifica() {
+void Empresa::modificaFunc() {
 	int numeracao, conf;
 	for (unsigned int i = 0; i < funcionarios.size(); i++) {
 		cout << i + 1 << "   " << funcionarios[i]->getNome() << endl;
@@ -505,7 +589,6 @@ void Empresa::modifica() {
 
 	cout << "Qual o funcionario que deseja modificar" << endl;
 	cin >> numeracao;
-	cin.ignore(1000, '\n');
 
 	clear();
 	cout << *(funcionarios[numeracao - 1]) << endl;
@@ -584,21 +667,23 @@ void Empresa::modifica() {
 		cout << "Especializacao alterada com sucesso" << endl;
 		pause();
 	}
+		break;
 	case 7: {
 		int opcao, nrvei;
 
-		cout << "adicionar veiculo--------1" << endl;
+		cout << "Adicionar veiculo--------1" << endl;
 		cout << "Remover veiculo----------2" << endl;
 		cin >> opcao;
 		if (opcao == 1) {
 			cout << "Veiculos disponiveis para adicionar" << endl;
 			for (unsigned int i = 0; i < veiculos.size(); i++) {
-				cout << i + 1 << veiculos[i]->getMarca() << endl;
+				cout << i + 1 << "   " << veiculos[i]->getMarca() << endl;
 			}
 			cout << "Selecione veiculo para adicionar" << endl;
 			cin >> nrvei;
-			funcionarios[numeracao - 1]->getVeiculos().push_back(
-					veiculos[nrvei - 1]);
+			funcionarios[numeracao - 1]->adicionaVeiculo(veiculos[nrvei - 1]);
+			cout << "Veiculo adicionado com sucesso" << endl;
+			pause();
 
 		} else {
 			if (opcao == 2) {
@@ -612,7 +697,9 @@ void Empresa::modifica() {
 				}
 				cout << "Selecione veiculo para retirar" << endl;
 				cin >> nrvei;
-				funcionarios[numeracao-1]->getVeiculos().erase(funcionarios[numeracao-1]->getVeiculos().begin()+(nrvei-1));
+				funcionarios[numeracao - 1]->removeVeiculo(nrvei - 1);
+				cout << "Veiculo removido com sucesso" << endl;
+				pause();
 
 			}
 
@@ -620,9 +707,429 @@ void Empresa::modifica() {
 	}
 		break;
 
+	case 0: {
+
+	}
+		break;
+
 	}
 
 }
 
+void Empresa::modificaCli() {
+	clear();
+	int indice, temp;
+	for (unsigned int i = 0; i < clientes.size(); i++) {
+		cout << i + 1 << "  " << clientes[i]->getNome() << endl;
+	}
+	cout << "Qual o cliente que deseja modificar?" << endl;
+	cin >> indice;
+	clear();
+	cout << *(clientes[indice - 1]) << endl;
+	pause();
 
+	cout << "O que deseja modificar?" << endl;
+	cout << "Nome ----------------1" << endl;
+	cout << "Contacto ------------2" << endl;
+	cout << "Morada---------------3" << endl;
+	cout << "Sair-----------------0" << endl;
+	cin >> temp;
+	cin.ignore(1000, '\n');
+	switch (temp) {
+	case 1: {
+		clear();
+		string nome;
+		cout << "Qual o novo nome?" << endl;
+		getline(cin, nome);
+		clientes[indice - 1]->setNome(nome);
+		cout << "Nome alterado com sucesso" << endl;
+		pause();
+	}
+		break;
+	case 2: {
+		clear();
+		string contacto;
+		cout << "Qual o novo contacto?" << endl;
+		getline(cin, contacto);
+		clientes[indice - 1]->setContacto(contacto);
+		cout << "Contacto alterado com sucesso" << endl;
+		pause();
+	}
+		break;
+	case 3: {
+		clear();
+		string morada;
+		cout << "Qual a nova morada?" << endl;
+		getline(cin, morada);
+		clientes[indice - 1]->setMorada(morada);
+		cout << "Morada alterada com sucesso" << endl;
+		pause();
+	}
+		break;
+	case 0: {
 
+	}
+		break;
+
+	}
+
+}
+
+void Empresa::menuVeiculos() {
+	int opcao;
+	cout << "Seleccione uma opcão:" << endl;
+	cout << "Adicionar Veiculo----------1" << endl;
+	cout << "Remover Veiculo------------2" << endl;
+	cout << "Modificar Veiculo----------3" << endl;
+	cout << "Listar Veiculos------------4" << endl;
+	cout << "Sair ----------------------0" << endl;
+	cin >> opcao;
+
+	switch (opcao) {
+
+	case 1: {
+		clear();
+		int i;
+		string marca, modelo, matricula, tipo;
+		cout << "Tipo de veiculo " << endl;
+		cout << "Carro---------------1" << endl;
+		cout << "Camiao--------------2" << endl;
+		cout << "Bus-----------------3" << endl;
+		cout << "Sair----------------0" << endl;
+		cin >> i;
+		cin.ignore(1000, '\n');
+
+		switch (i) {
+		case 1: {
+			clear();
+			cout << "Insira marca" << endl;
+			getline(cin, marca);
+			cout << "Insira modelo" << endl;
+			getline(cin, modelo);
+			cout << "Insira Matricula (XX-XX-XX)" << endl;
+			getline(cin, matricula);
+			cout << "Insira categoria" << endl;
+			getline(cin, tipo);
+
+			Carro *c = new Carro(marca, modelo, matricula, tipo);
+			novoCarro(c);
+			pause();
+
+		}
+			break;
+		case 2: {
+			clear();
+			cout << "Insira marca" << endl;
+			getline(cin, marca);
+			cout << "Insira modelo" << endl;
+			getline(cin, modelo);
+			cout << "Insira Matricula (XX-XX-XX)" << endl;
+			getline(cin, matricula);
+			cout << "Insira categoria" << endl;
+			getline(cin, tipo);
+
+			Camiao *c = new Camiao(marca, modelo, matricula, tipo);
+			novoCamiao(c);
+			pause();
+
+		}
+			break;
+
+		case 3: {
+
+			clear();
+			cout << "Insira marca" << endl;
+			getline(cin, marca);
+			cout << "Insira modelo" << endl;
+			getline(cin, modelo);
+			cout << "Insira Matricula (XX-XX-XX)" << endl;
+			getline(cin, matricula);
+			Bus *b = new Bus(marca, modelo, matricula);
+			novoBus(b);
+			pause();
+		}
+			break;
+
+		}
+
+	}
+		break;
+
+	case 2: {
+		int opcao, temp;
+		cout << "Insira tipo que deseja remover" << endl;
+		cout << "Carro-------------------1" << endl;
+		cout << "Camiao------------------2" << endl;
+		cout << "Bus---------------------3" << endl;
+		cout << "Sair--------------------0" << endl;
+		cin >>opcao;
+		switch (opcao) {
+		case 1: {
+			for (unsigned int i = 0; i < carros.size(); i++) {
+				cout << i + 1 << "   " << carros[i]->getMarca() << endl;
+			}
+			cout << "Selecione o carro que deseja eliminar" << endl;
+			cin >> temp;
+			removeCarro(temp - 1);
+			pause();
+		}
+			break;
+		case 2: {
+			for (unsigned int i = 0; i < camioes.size(); i++) {
+				cout << i + 1 << "   " << camioes[i]->getMarca() << endl;
+			}
+			cout << "Selecione o camiao que deseja eliminar" << endl;
+			cin >> temp;
+			removeCamiao(temp - 1);
+			pause();
+		}
+			break;
+
+		case 3: {
+			for (unsigned int i = 0; i < buses.size(); i++) {
+				cout << i + 1 << "   " << buses[i]->getMarca() << endl;
+			}
+			cout << "Selecione o bus que deseja eliminar" << endl;
+			cin >> temp;
+			removeBus(temp - 1);
+			pause();
+		}
+			break;
+
+		case 0: {
+
+		}
+			break;
+		}
+	}
+		break;
+	case 3: {
+		modificaVeic();
+	}
+		break;
+	case 4: { //listagem de veiculos
+		clear();
+		int op, car;
+		cout << "O que deseja listar?" << endl;
+		cout << "Carros----------------1" << endl;
+		cout << "Camioes---------------2" << endl;
+		cout << "Buses-----------------3" << endl;
+		cout << "Todos-----------------4" << endl;
+		cout << "Sair------------------0" << endl;
+		cin >> op;
+		cin.ignore(1000, '\n');
+
+		switch (op) {
+		case 1: { // listar carros
+			for (unsigned int i = 0; i < carros.size(); i++) {
+				cout << i + 1 << "  " << carros[i]->getMarca() << endl;
+			}
+			cout << "Que carro deseja analizar?" << endl;
+			cin >> car;
+			cout << *(carros[car - 1]) << endl;
+			pause();
+
+		}
+			break;
+		case 2: { //listar camioes
+			for (unsigned int i = 0; i < camioes.size(); i++) {
+				cout << i + 1 << "  " << camioes[i]->getMarca() << endl;
+			}
+			cout << "Que camiao deseja analizar?" << endl;
+			cin >> car;
+			cout << *(camioes[car - 1]) << endl;
+			pause();
+
+		}
+			break;
+		case 3: { // listar buses
+
+			for (unsigned int i = 0; i < buses.size(); i++) {
+				cout << i + 1 << "  " << buses[i]->getMarca() << endl;
+			}
+			cout << "Que bus deseja analizar?" << endl;
+			cin >> car;
+			cout << *(buses[car - 1]) << endl;
+			pause();
+
+		}
+			break;
+		case 4: { //listar todos
+			for (unsigned int i = 0; i < veiculos.size(); i++) {
+				cout << i + 1 << "  " << veiculos[i]->getMarca() << endl;
+			}
+			cout << "Que veiculo deseja analizar?" << endl;
+			cin >> car;
+			cout << *(veiculos[car - 1]) << endl;
+			pause();
+		}
+			break;
+		case 0:{
+
+		}break;
+
+		}
+
+	}
+		break;
+
+	}
+
+}
+
+void Empresa::modificaVeic() {
+	clear();
+	string marca, modelo, matricula, categoria;
+	int indice;
+	cout << "Que tipo de veiculo deseja alterar?" << endl;
+	cout << "Carro-----------------------------1" << endl;
+	cout << "Camiao----------------------------2" << endl;
+	cout << "Bus-------------------------------3" << endl;
+	cout << "Sair------------------------------0" << endl;
+	cin >> indice;
+	switch (indice) {
+	case 1: {
+		int op, nCarro;
+		for (unsigned int i = 0; i < carros.size(); i++) {
+			cout << i + 1 << "   " << carros[i]->getMarca() << endl;
+		}
+		cout << "Insira carro que deseja alterar" << endl;
+		cin >> nCarro;
+		cout << "Que atributo deseja alterar?" << endl;
+		cout << "Marca------------------------1" << endl;
+		cout << "Modelo-----------------------2" << endl;
+		cout << "Matricula--------------------3" << endl;
+		cout << "Categoria--------------------4" << endl;
+		cout << "Sair-------------------------0" << endl;
+		cin >> op;
+		cin.ignore(1000,'\n');
+		switch (op) {
+		case 1: {
+			cout << "Insira nova marca" << endl;
+			getline(cin, marca);
+			carros[nCarro - 1]->setMarca(marca);
+
+		}
+			break;
+		case 2: {
+			cout << "Insira novo modelo" << endl;
+			getline(cin, modelo);
+			carros[nCarro - 1]->setMarca(modelo);
+		}
+			break;
+		case 3: {
+			cout << "Insira nova matricula" << endl;
+			getline(cin, matricula);
+			carros[nCarro - 1]->setMatricula(matricula);
+		}
+			break;
+		case 4: {
+			cout << "Insira nova categoria" << endl;
+			getline(cin, categoria);
+			camioes[nCarro - 1]->setCategoria(categoria);
+		}
+			break;
+		case 0: {
+
+		}
+			break;
+		}
+	}
+		break;
+	case 2: { /*modificar camioes*/
+		int op, nCarro;
+		for (unsigned int i = 0; i < camioes.size(); i++) {
+			cout << i + 1 << "   " << camioes[i]->getMarca() << endl;
+		}
+		cout << "Insira camiao que deseja alterar" << endl;
+		cin >> nCarro;
+		cout << "Que atributo deseja alterar?" << endl;
+		cout << "Marca------------------------1" << endl;
+		cout << "Modelo-----------------------2" << endl;
+		cout << "Matricula--------------------3" << endl;
+		cout << "Categoria--------------------4" << endl;
+		cout << "Sair-------------------------0" << endl;
+		cin >> op;
+		cin.ignore(1000,'\n');
+		switch (op) {
+		case 1: {
+			cout << "Insira nova marca" << endl;
+			getline(cin, marca);
+			camioes[nCarro - 1]->setMarca(marca);
+
+		}
+			break;
+		case 2: {
+			cout << "Insira novo modelo" << endl;
+			getline(cin, modelo);
+			camioes[nCarro - 1]->setMarca(modelo);
+		}
+			break;
+		case 3: {
+			cout << "Insira nova matricula" << endl;
+			getline(cin, matricula);
+			camioes[nCarro - 1]->setMatricula(matricula);
+		}
+			break;
+		case 4: {
+			cout << "Insira nova categoria" << endl;
+			getline(cin, categoria);
+			camioes[nCarro - 1]->setCategoria(categoria);
+		}
+			break;
+		case 0: {
+
+		}
+			break;
+		}
+	}
+		break;
+
+	case 3: { /*Modifica bus  */
+		int opcao, nBus;
+		for (unsigned int i = 0; i < buses.size(); i++) {
+			cout << i + 1 << "   " << buses[i]->getMarca() << endl;
+		}
+		cout << "Selecione qual o bus que deseja modificar" << endl;
+		cin >> nBus;
+		clear();
+		cout << "Que atributo deseja alterar?" << endl;
+		cout << "Marca------------------------1" << endl;
+		cout << "Modelo-----------------------2" << endl;
+		cout << "Matricula--------------------3" << endl;
+		cout << "Sair-------------------------0" << endl;
+		cin >> opcao;
+		cin.ignore(1000,'\n');
+		switch (opcao) {
+		case 1: {
+			cout << "Insira nova marca" << endl;
+			getline(cin, marca);
+			buses[nBus - 1]->setMarca(marca);
+
+		}
+			break;
+		case 2: {
+			cout << "Insira novo modelo" << endl;
+			getline(cin, modelo);
+			buses[nBus - 1]->setMarca(modelo);
+		}
+			break;
+		case 3: {
+			cout << "Insira nova matricula" << endl;
+			getline(cin, matricula);
+			buses[nBus - 1]->setMatricula(matricula);
+			pause();
+		}
+			break;
+		case 0: {
+
+		}
+			break;
+
+		}
+		break;
+
+	}
+		break;
+	}
+}

@@ -72,6 +72,15 @@ retorno = ss.str();
 return retorno;
 }
 
+void Funcionario::adicionaVeiculo(Veiculo * v){
+	veiculos.push_back(v);
+}
+
+void Funcionario::removeVeiculo(int indice){
+	veiculos.erase(veiculos.begin()+indice);
+}
+
+
 
 ostream& operator<< (ostream &out, const Funcionario &func){
 
@@ -83,6 +92,10 @@ ostream& operator<< (ostream &out, const Funcionario &func){
 	out << "Tipo: " << func.getTipo() << endl;
 	out << "Salario: " << func.getSalario() << endl;
 	out << "Numero horas extra: " << func.getHorasExtra() << endl;
+	out << "Veiculos: " << endl;
+	for(unsigned int i =0; i<func.getVeiculos().size(); i++){
+		out << func.getVeiculos()[i]->getMarca() << endl;
+	}
 
 
 	return out;}

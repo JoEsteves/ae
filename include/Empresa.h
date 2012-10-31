@@ -36,24 +36,36 @@ public:
 	void pause();
 	void novoFuncionario(Funcionario* func);
 	void novoCliente(Cliente* c);
-	void modifica();
+
+	void modificaFunc();
+	void modificaCli();
+	void modificaVeic();
+
 	void removeFuncionario(int i);
-	bool removeCliente(Cliente* clie);
+	void removeCliente(int indice);
+
+	void menuVeiculos();
 
 	void escreveClientes();
 	void escreveFuncionarios();
+
 	void leClientes();
 	void leFuncionarios();
 
-	void distribui();
+	void distribuiPessoas();
+	void distribuiVeiculos();
 
 
-	void novoVeiculo(Veiculo * v);
-	void removeVeiculo(Veiculo * v);
+	void novoCarro(Carro *c);
+	void novoCamiao(Camiao *c);
+	void novoBus(Bus *b);
+	void removeCarro(int indice);
+	void removeCamiao(int indice);
+	void removeBus(int indice);
 
 	void escreveCarros();
-	void leCarros();
 
+	void leCarros();
 	void leBuses();
 	void escreveBuses();
 
