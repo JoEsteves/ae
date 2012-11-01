@@ -29,7 +29,6 @@ void Carro::setTipo(string tp)
 }
 
 ostream & operator<<(ostream & o, const Carro & c){
-      o << "!**************************Carro:***********************************!" << endl;
       o << "ID: " << c.getID() << endl;
       o << "Marca: " << c.getMarca() << endl;
       o << "Modelo: " << c.getModelo() << endl;

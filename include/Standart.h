@@ -1,24 +1,26 @@
 #ifndef STANDART_H
 #define STANDART_H
 #include "Servico.h"
+#include <iostream>
 
-class Standart:public Servico{
+class Standard:public Servico{
 private:
 	string nome;
 	string descricao;
 	double preco;
 	double duracao;
 public:
-	Standart(string nome, string descricao,double preco, double duracao, string data_inicio, string data_fim);
-	string get_nome() const;
-	void set_nome(string nome);
-	string get_descricao() const;
-	void set_descricao(string descricao);
-	double get_preco() const;
-	void set_preco(double preco);
-	double get_duracao() const;
-	void set_duracao(double duracao);
-	//void imprime();
+	Standard(string nome, string descricao,double preco, double duracao, string data_inicio, string data_fim);
+	string getNome() const;
+	void setNome(string nome);
+	string getDescricao() const;
+	void setDescricao(string descricao);
+	double getPreco() const;
+	void setPreco(double preco);
+	double getDuracao() const;
+	void setDuracao(double duracao);
+	friend ostream & operator<<(ostream & o, const Standard & s);
+	//TODO calcular preco final
 
 };
 

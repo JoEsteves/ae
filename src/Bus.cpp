@@ -17,7 +17,6 @@ Bus::~Bus()
 {}
 
 ostream & operator<<(ostream & o, const Bus & b){
-      o << "!**************************Bus:***********************************!" << endl;
       o << "ID: " << b.getID() << endl;
       o << "Marca: " << b.getMarca() << endl;
       o << "Modelo: " << b.getModelo() << endl;

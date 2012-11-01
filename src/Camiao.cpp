@@ -29,7 +29,6 @@ void Camiao::setCategoria(string cat)
 }
 
 ostream & operator<<(ostream & o, const Camiao & cm){
-      o << "!**************************Camiao:***********************************!" << endl;
       o << "ID: " << cm.getID() << endl;
       o << "Marca: " << cm.getMarca() << endl;
       o << "Modelo: " << cm.getModelo() << endl;

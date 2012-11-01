@@ -15,6 +15,7 @@ Veiculo::Veiculo() {
 	modelo = "";
 	matricula = "";
 	ID++;
+
 }
 
 Veiculo::Veiculo(string mc, string mdl, string mt) {
@@ -39,6 +40,7 @@ ostream & operator<<(ostream & o, const Veiculo & v) {
 	o << "Marca: " << v.getMarca() << endl;
 	o << "Modelo: " << v.getModelo() << endl;
 	o << "Matricula: " << v.getMatricula() << endl;
+
 
 	return o;
 }
@@ -78,4 +80,23 @@ void Veiculo::setMatricula(string mt) {
 
 Veiculo::~Veiculo() {
 }
+
+
+
+void Veiculo::novoStandard(Standard * s){
+		standards.push_back(s);
+}
+
+void Veiculo::removeStandard(int indice){
+	standards.erase(standards.begin()+indice);
+}
+
+vector<Standard *> Veiculo::getStandards(){
+	return standards;
+}
+
+void Veiculo::setStandards(vector<Standard*> standards){
+	this->standards=standards;
+}
+
 

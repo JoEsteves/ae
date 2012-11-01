@@ -2,6 +2,7 @@
 #define PESSOA_H
 
 #include <iostream>
+#include "Veiculo.h"
 
 using namespace std;
 

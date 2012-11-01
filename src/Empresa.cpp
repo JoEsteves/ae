@@ -6,18 +6,22 @@ Empresa::Empresa() {
 	leClientes();
 	leFuncionarios();
 
+	leStandards();
+
 	leBuses();
 	leCamioes();
 	leCarros();
 
 	distribuiPessoas();
 	distribuiVeiculos();
+
 }
 
 Empresa::~Empresa() {
 
 }
 
+///////////////////////Funcoes usadas em todos os menus ////////////////////
 void Empresa::clear() {
 	for (unsigned int i = 0; i < 40; i++) {
 		cout << endl;
@@ -30,58 +34,16 @@ void Empresa::pause() {
 	cin.get();
 }
 
-void Empresa::escreveClientes() {
-	fstream ficheiro;
-	ficheiro.open("Clientes.txt", fstream::out);
+////////////////////////////////////////////////////////////////////////
 
-	if (ficheiro.is_open()) {
-		for (unsigned int i = 0; i < clientes.size(); i++) {
-			ficheiro << clientes[i]->getNome() << endl;
-			ficheiro << clientes[i]->getContacto() << endl;
-			ficheiro << clientes[i]->getMorada();
-			if (i != clientes.size() - 1) {
-				ficheiro << endl;
-			}
-		}
-	}
-	ficheiro.close();
-}
-
-void Empresa::escreveFuncionarios() {
-	fstream ficheiro;
-	ficheiro.open("Funcionarios.txt", fstream::out);
-
-	if (ficheiro.is_open()) {
-		for (unsigned int i = 0; i < funcionarios.size(); i++) {
-			ficheiro << funcionarios[i]->getNome() << endl;
-			ficheiro << funcionarios[i]->getContacto() << endl;
-			ficheiro << funcionarios[i]->getMorada() << endl;
-			ficheiro << funcionarios[i]->getTipo() << endl;
-			ficheiro << funcionarios[i]->getSalario() << endl;
-			ficheiro << funcionarios[i]->getHorasExtra() << endl;
-			ficheiro << funcionarios[i]->getVeiculos().size() << endl;
-			for (unsigned int j = 0; j < funcionarios[i]->getVeiculos().size();
-					j++) {
-				ficheiro << funcionarios[i]->getVeiculos()[j]->getMarca()
-						<< endl;
-				ficheiro << funcionarios[i]->getVeiculos()[j]->getMatricula()
-						<< endl;
-				ficheiro << funcionarios[i]->getVeiculos()[j]->getModelo();
-				if (j != funcionarios[i]->getVeiculos().size() - 1) {
-					ficheiro << endl;
-				}
-			}
-			if (i != funcionarios.size() - 1) {
-				ficheiro << endl;
-			}
-		}
-	}
-	ficheiro.close();
-}
+/////////////////////Acrescenta e remove objectos aos vectores respectivos ///////////////////
 
 void Empresa::novoCliente(Cliente * c) {
 	clientes.push_back(c);
+}
 
+void Empresa::novoFuncionario(Funcionario * f) {
+	funcionarios.push_back(f);
 }
 
 void Empresa::removeFuncionario(int i) {
@@ -116,106 +78,168 @@ void Empresa::removeBus(int indice) {
 	buses.erase(buses.begin() + indice);
 }
 
-void Empresa::leCarros() {
-	fstream file;
-	string brand, model, lp, tip;
-	file.open("Carros.txt");
-
-	if (file.is_open()) {
-		while (!file.eof()) {
-			getline(file, brand);
-			if(brand==" ") exit(-1);
-			getline(file, model);
-			getline(file, lp);
-			getline(file, tip);
-
-			Carro * v = new Carro(brand, model, lp, tip);
-			carros.push_back(v);
-		}
-	}
-
+void Empresa::novoStandard(Standard *s) {
+	standards.push_back(s);
 }
 
-void Empresa::leBuses() {
-	fstream file;
-	string brand, model, lp;
-	file.open("Buses.txt");
-
-	if (file.is_open()) {
-		while (!file.eof()) {
-			getline(file, brand);
-			if(brand==" ") return;
-			getline(file, model);
-			getline(file, lp);
-
-			Bus * v = new Bus(brand, model, lp);
-			buses.push_back(v);
-		}
-	}
-
+void Empresa::removeStandard(int indice) {
+	standards.erase(standards.begin() + indice);
 }
 
-void Empresa::leCamioes() {
-	fstream file;
-	string brand, model, lp, cat;
-	file.open("Camioes.txt");
+//////////////////////////////////////////////////////////////////
 
-	if (file.is_open()) {
-		while (!file.eof()) {
-			getline(file, brand);
-			if(brand==" ") return;
-			getline(file, model);
-			getline(file, lp);
-			getline(file, cat);
+////////////////////////////////// Passa os vectores filho para o vector pai respectivo
 
-			Camiao * v = new Camiao(brand, model, lp, cat);
-			camioes.push_back(v);
-		}
+void Empresa::distribuiPessoas() {
+	for (unsigned int i = 0; i < clientes.size(); i++) {
+		pessoas.push_back(clientes[i]);
+	}
+	for (unsigned int i = 0; i < funcionarios.size(); i++) {
+		pessoas.push_back(funcionarios[i]);
+	}
+}
+
+void Empresa::distribuiVeiculos() {
+	for (unsigned int i = 0; i < carros.size(); i++) {
+		veiculos.push_back(carros[i]);
 	}
 
+	for (unsigned int i = 0; i < camioes.size(); i++) {
+		veiculos.push_back(camioes[i]);
+	}
+
+	for (unsigned int i = 0; i < buses.size(); i++) {
+		veiculos.push_back(buses[i]);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////Escreve nos ficheiros respectivos////////
+
+void Empresa::escreveClientes() {
+	fstream ficheiro;
+	ficheiro.open("Clientes.txt", fstream::out);
+
+	if (ficheiro.is_open()) {
+		for (unsigned int i = 0; i < clientes.size(); i++) {
+			ficheiro << clientes[i]->getNome() << endl;
+			ficheiro << clientes[i]->getContacto() << endl;
+			ficheiro << clientes[i]->getMorada();
+			if (i != clientes.size() - 1) {
+				ficheiro << endl;
+			}
+		}
+	}
+	ficheiro.close();
+}
+
+void Empresa::escreveFuncionarios() {
+	fstream ficheiro;
+	ficheiro.open("Funcionarios.txt", fstream::out);
+
+	if (ficheiro.is_open()) {
+		for (unsigned int i = 0; i < funcionarios.size(); i++) {
+			ficheiro << funcionarios[i]->getNome() << endl;
+			ficheiro << funcionarios[i]->getContacto() << endl;
+			ficheiro << funcionarios[i]->getMorada() << endl;
+			ficheiro << funcionarios[i]->getTipo() << endl;
+			ficheiro << funcionarios[i]->getSalario() << endl;
+			ficheiro << funcionarios[i]->getHorasExtra() << endl;
+			ficheiro << funcionarios[i]->getVeiculos().size();
+			for (unsigned int j = 0; j < funcionarios[i]->getVeiculos().size();
+					j++) {
+				ficheiro << endl;
+				ficheiro << funcionarios[i]->getVeiculos()[j]->getMarca()
+						<< endl;
+				ficheiro << funcionarios[i]->getVeiculos()[j]->getMatricula()
+						<< endl;
+				ficheiro << funcionarios[i]->getVeiculos()[j]->getModelo();
+				if (j != funcionarios[i]->getVeiculos().size() - 1) {
+					ficheiro << endl;
+				}
+			}
+			if (i != funcionarios.size() - 1) {
+				ficheiro << endl;
+			}
+		}
+	}
+	ficheiro.close();
 }
 
 void Empresa::escreveCarros() {
-	ofstream filestr;
-	filestr.open("Carros.txt");
+	fstream filestr;
+	filestr.open("Carros.txt", fstream::out);
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < carros.size(); i++) {
-			if(i!=0){
-				filestr << carros[i]->getMarca() << endl;
+			filestr << carros[i]->getMarca() << endl;
 			filestr << carros[i]->getModelo() << endl;
 			filestr << carros[i]->getMatricula() << endl;
-			filestr << carros[i]->getTipo();
+			filestr << carros[i]->getTipo() << endl;
+			filestr << carros[i]->getStandards().size();
 
-			if (i != veiculos.size() - 1) {
+			for (unsigned int j = 0; j < carros[i]->getStandards().size();
+					j++) {
+				if(j==0) filestr << endl;
+				filestr << carros[i]->getStandards()[j]->getNome() << endl;
+				filestr << carros[i]->getStandards()[j]->getDescricao() << endl;
+				filestr << carros[i]->getStandards()[j]->getPreco() << endl;
+				filestr << carros[i]->getStandards()[j]->getDuracao() << endl;
+				filestr << carros[i]->getStandards()[j]->getDataInicio()
+						<< endl;
+				filestr << carros[i]->getStandards()[j]->getDataFim();
+				if (j != carros[i]->getStandards().size() - 1) {
+					filestr << endl;
+				}
+			}
+
+			if (i != carros.size() - 1) {
 				filestr << endl;
 			}
-			}
+
 		}
-		filestr.close();
-	} else
-		throw "Impossivel abrir o ficheiro Carros.txt";
+
+	}
+	filestr.close();
 }
 
 void Empresa::escreveBuses() {
-	ofstream filestr;
-	filestr.open("Buses.txt");
+	fstream filestr;
+	filestr.open("Buses.txt", fstream::out);
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < buses.size(); i++) {
-			if(i!=0){
-			filestr << buses[i]->getMarca() << endl;
-			filestr << buses[i]->getModelo() << endl;
-			filestr << buses[i]->getMatricula();
 
-			if (i != buses.size() - 1) {
-				filestr << endl;
-			}
-			}
+				filestr << buses[i]->getMarca() << endl;
+				filestr << buses[i]->getModelo() << endl;
+				filestr << buses[i]->getMatricula()<< endl;
+				filestr << buses[i]->getStandards().size();
+				for (unsigned int j = 0; j < buses[i]->getStandards().size();
+						j++) {
+					if(j==0) filestr << endl;
+					filestr << buses[i]->getStandards()[j]->getNome() << endl;
+					filestr << buses[i]->getStandards()[j]->getDescricao()
+							<< endl;
+					filestr << buses[i]->getStandards()[j]->getPreco() << endl;
+					filestr << buses[i]->getStandards()[j]->getDuracao()
+							<< endl;
+					filestr << buses[i]->getStandards()[j]->getDataInicio()
+							<< endl;
+					filestr << buses[i]->getStandards()[j]->getDataFim();
+
+					if (j != buses[i]->getStandards().size() - 1) {
+						filestr << endl;
+					}
+
+				}
+				if (i != buses.size() - 1) {
+					filestr << endl;
+				}
+
 		}
-		filestr.close();
-	} else
-		throw "Impossivel abrir o ficheiro Buses.txt";
+
+	}filestr.close();
 }
 
 void Empresa::escreveCamioes() {
@@ -224,25 +248,62 @@ void Empresa::escreveCamioes() {
 
 	if (filestr.is_open()) {
 		for (unsigned int i = 0; i < camioes.size(); i++) {
-			if(i!=0){
-			filestr << camioes[i]->getMarca() << endl;
-			filestr << camioes[i]->getModelo() << endl;
-			filestr << camioes[i]->getMatricula() << endl;
-			filestr << camioes[i]->getCategoria();
+				filestr << camioes[i]->getMarca() << endl;
+				filestr << camioes[i]->getModelo() << endl;
+				filestr << camioes[i]->getMatricula() << endl;
+				filestr << camioes[i]->getCategoria() << endl;
+				filestr << camioes[i]->getStandards().size();
+				for (unsigned int j = 0; j < camioes[i]->getStandards().size();
+						j++) {
+					if(j==0) filestr << endl;
+					filestr << camioes[i]->getStandards()[j]->getNome() << endl;
+					filestr << camioes[i]->getStandards()[j]->getDescricao()
+							<< endl;
+					filestr << camioes[i]->getStandards()[j]->getPreco()
+							<< endl;
+					filestr << camioes[i]->getStandards()[j]->getDuracao()
+							<< endl;
+					filestr << camioes[i]->getStandards()[j]->getDataInicio()
+							<< endl;
+					filestr << camioes[i]->getStandards()[j]->getDataFim();
+					if (j != camioes[i]->getStandards().size() - 1) {
+						filestr << endl;
+					}
 
-			if (i != camioes.size() - 1) {
-				filestr << endl;
+				}
+
+				if (i != camioes.size() - 1) {
+					filestr << endl;
+				}
+
+		}
+
+	} filestr.close();
+}
+
+void Empresa::escreveStandards() {
+	fstream ficheiro;
+	ficheiro.open("Standards.txt", fstream::out);
+
+	if (ficheiro.is_open()) {
+		for (unsigned int i = 0; i < standards.size(); i++) {
+			ficheiro << standards[i]->getNome() << endl;
+			ficheiro << standards[i]->getDescricao() << endl;
+			ficheiro << standards[i]->getDuracao() << endl;
+			ficheiro << standards[i]->getPreco() << endl;
+			ficheiro << standards[i]->getDataInicio() << endl;
+			ficheiro << standards[i]->getDataFim();
+			if (i != standards.size() - 1) {
+				ficheiro << endl;
 			}
 		}
-		}
-		filestr.close();
-	} else
-		throw "Impossivel abrir o ficheiro Camioes.txt";
+	}
+	ficheiro.close();
 }
 
-void Empresa::novoFuncionario(Funcionario * f) {
-	funcionarios.push_back(f);
-}
+//////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////Le ficheiros respectivos//////////////////////
 
 void Empresa::leClientes() {
 	fstream ficheiro;
@@ -255,7 +316,8 @@ void Empresa::leClientes() {
 	if (ficheiro.is_open()) {
 		while (!ficheiro.eof()) {
 			getline(ficheiro, nome);
-			if(nome==" ") return;
+			if (nome == " ")
+				return;
 			getline(ficheiro, contacto);
 			getline(ficheiro, morada);
 
@@ -282,7 +344,8 @@ void Empresa::leFuncionarios() {
 		while (!ficheiro.eof()) {
 
 			getline(ficheiro, nome);
-			if(nome==" ") return;
+			if (nome == " ")
+				return;
 			getline(ficheiro, contacto);
 			getline(ficheiro, morada);
 			getline(ficheiro, tipo);
@@ -311,30 +374,162 @@ void Empresa::leFuncionarios() {
 
 }
 
-void Empresa::distribuiPessoas() {
-	for (unsigned int i = 0; i < clientes.size(); i++) {
-		pessoas.push_back(clientes[i]);
+void Empresa::leCarros() {
+	fstream file;
+	string brand, model, lp, tip, nre, nome, descricao, precoe, duracaoe, datai,
+			dataf;
+	int nr;
+	vector<Standard*> stand;
+
+	double preco, duracao;
+	file.open("Carros.txt");
+
+	if (file.is_open()) {
+		while (!file.eof()) {
+			getline(file, brand);
+			getline(file, model);
+			getline(file, lp);
+			getline(file, tip);
+			getline(file, nre);
+			nr = atoi(nre.c_str());
+			for (unsigned int i = 0; i < nr; i++) {
+				getline(file, nome);
+				getline(file, descricao);
+				getline(file, precoe);
+				getline(file, duracaoe);
+				getline(file, datai);
+				getline(file, dataf);
+				preco = atof(precoe.c_str());
+				duracao = atof(duracaoe.c_str());
+				Standard *s = new Standard(nome, descricao, preco, duracao,
+						datai, dataf);
+				stand.push_back(s);
+
+			}
+
+			Carro * v = new Carro(brand, model, lp, tip);
+			v->setStandards(stand);
+			novoCarro(v);
+		}
 	}
-	for (unsigned int i = 0; i < funcionarios.size(); i++) {
-		pessoas.push_back(funcionarios[i]);
+
+}
+
+void Empresa::leBuses() {
+	fstream file;
+	string brand, model, lp, nre, nome, descricao, precoe, duracaoe, datai,
+			dataf;
+	double preco, duracao;
+	int nr;
+	vector<Standard*> stand;
+
+	file.open("Buses.txt");
+
+	if (file.is_open()) {
+		while (!file.eof()) {
+			getline(file, brand);
+			getline(file, model);
+			getline(file, lp);
+
+			getline(file, nre);
+			nr = atoi(nre.c_str());
+			for (unsigned int i = 0; i < nr; i++) {
+				getline(file, nome);
+				getline(file, descricao);
+				getline(file, precoe);
+				getline(file, duracaoe);
+				getline(file, datai);
+				getline(file, dataf);
+				preco = atof(precoe.c_str());
+				duracao = atof(duracaoe.c_str());
+				Standard *s = new Standard(nome, descricao, preco, duracao,
+						datai, dataf);
+				stand.push_back(s);
+
+			}
+
+			Bus * v = new Bus(brand, model, lp);
+			v->setStandards(stand);
+			novoBus(v);
+		}
+	}
+
+}
+
+void Empresa::leCamioes() {
+	fstream file;
+	string brand, model, lp, cat, nre, nome, descricao, precoe, duracaoe, datai,
+			dataf;
+	int nr;
+	double preco, duracao;
+	vector<Standard *> stand;
+	file.open("Camioes.txt");
+
+	if (file.is_open()) {
+		while (!file.eof()) {
+			getline(file, brand);
+			getline(file, model);
+			getline(file, lp);
+			getline(file, cat);
+
+			getline(file, nre);
+			nr = atoi(nre.c_str());
+			for (unsigned int i = 0; i < nr; i++) {
+				getline(file, nome);
+				getline(file, descricao);
+				getline(file, precoe);
+				getline(file, duracaoe);
+				getline(file, datai);
+				getline(file, dataf);
+				preco = atof(precoe.c_str());
+				duracao = atof(duracaoe.c_str());
+				Standard *s = new Standard(nome, descricao, preco, duracao,
+						datai, dataf);
+				stand.push_back(s);
+
+			}
+
+			Camiao * v = new Camiao(brand, model, lp, cat);
+			v->setStandards(stand);
+			novoCamiao(v);
+
+		}
 	}
 }
 
-void Empresa::distribuiVeiculos() {
-	for (unsigned int i = 0; i < carros.size(); i++) {
-		veiculos.push_back(carros[i]);
+void Empresa::leStandards() {
+
+	fstream file;
+	string nome, descricao, duracaoe, precoe, dataI, dataF;
+	double duracao, preco;
+	file.open("Standards.txt");
+	if (file.is_open()) {
+		while (!file.eof()) {
+
+			getline(file, nome);
+			if (nome == " ")
+				return;
+
+			getline(file, descricao);
+			getline(file, duracaoe);
+			getline(file, precoe);
+			getline(file, dataI);
+			getline(file, dataF);
+
+			duracao = atof(duracaoe.c_str());
+			preco = atof(precoe.c_str());
+
+			Standard * s = new Standard(nome, descricao, duracao, preco, dataI,
+					dataF);
+			novoStandard(s);
+		}
 	}
 
-	for (unsigned int i = 0; i < camioes.size(); i++) {
-		veiculos.push_back(camioes[i]);
-	}
-
-	for (unsigned int i = 0; i < buses.size(); i++) {
-		veiculos.push_back(buses[i]);
-	}
 }
 
-///////////////////////////////////MENU////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////MENU geral////////////////////////////////////
 
 void Empresa::menu() {
 	int op, opF, opC;
@@ -348,7 +543,7 @@ void Empresa::menu() {
 		cout << "Servicos----------------------4" << endl;
 		cout << "Sair--------------------------0" << endl;
 		cout << "Escolha a sua opcao" << endl;
-		cout << "opcao : ";
+		cout << "Opcao : ";
 		cin >> op;
 		switch (op) {
 		case 1: {
@@ -360,6 +555,8 @@ void Empresa::menu() {
 			cout << "Remover Funcionario------------------2" << endl;
 			cout << "Modificar Funcionario----------------3" << endl;
 			cout << "Listar Funcionarios------------------4" << endl;
+			cout << "Adicionar Veiculo a Funcionario------5" << endl;
+			cout << "Remover Veiculo a Funcionario--------6" << endl;
 			cout << "Sair---------------------------------0" << endl;
 			cin >> opF;
 			cin.ignore(1000, '\n');
@@ -397,7 +594,7 @@ void Empresa::menu() {
 					if (confirmacao == 1) {
 						novoFuncionario(funcTemp);
 					} else {
-						cout << "Deseja insirir os dados de novo?" << endl;
+						cout << "Deseja inserir os dados de novo?" << endl;
 						cout << "Nao-----------1" << endl;
 						cout << "Sim-----------2" << endl;
 						cin >> confirmacao;
@@ -411,36 +608,43 @@ void Empresa::menu() {
 			case 2: {
 				clear();
 				int numeracao, conf;
-				for (unsigned int i = 0; i < funcionarios.size(); i++) {
-					cout << i + 1 << "   " << funcionarios[i]->getNome()
+				do {
+					for (unsigned int i = 0; i < funcionarios.size(); i++) {
+						cout << i + 1 << "   " << funcionarios[i]->getNome()
+								<< endl;
+					}
+
+					cout << "Qual dos funcionarios deseja eliminar?" << endl;
+					cin >> numeracao;
+
+					clear();
+					cout << *(funcionarios[numeracao - 1]) << endl;
+					cout << "Tem a certeza que quer apagar este Funcionario?"
 							<< endl;
-				}
+					cout << "Sim --------------------------------------1"
+							<< endl;
+					cout << "Nao --------------------------------------2"
+							<< endl;
+					cin >> conf;
+					if (conf == 1) {
+						removeFuncionario(numeracao - 1);
+						cout << "Funcionario apagado do sistema" << endl;
+						pause();
+					} else {
 
-				cout << "Qual dos funcionarios deseja eliminar?" << endl;
-				cin >> numeracao;
+						cout << "Deseja inserir os dados de novo?" << endl;
+						cout << "Nao-----------1" << endl;
+						cout << "Sim-----------2" << endl;
+						cin >> conf;
 
-				clear();
-				cout << *(funcionarios[numeracao - 1]) << endl;
-				cout << "Tem a certeza que quer apagar este Funcionario?"
-						<< endl;
-				cout << "Sim --------------------------------------------1"
-						<< endl;
-				cout << "Nao --------------------------------------------2"
-						<< endl;
-				cin >> conf;
-				if (conf == 1) {
-					removeFuncionario(numeracao - 1);
-					cout << "Funcionario apagado do sistema" << endl;
-					pause();
-				}
+					}
+				} while (conf != 1);
 			}
 
 				break;
 
 			case 3: {
-
 				modificaFunc();
-
 			}
 				break;
 
@@ -459,6 +663,12 @@ void Empresa::menu() {
 				pause();
 			}
 				break;
+			case 5: { //adiciona veiculos a um funcionario
+				clear();
+				adicionaVeiculoFuncionario();
+				pause();
+			}
+
 			case 0: {
 				opF = 0;
 			}
@@ -478,6 +688,7 @@ void Empresa::menu() {
 			cout << "Sair---------------------------------0" << endl;
 			cin >> opC;
 			cin.ignore(1000, '\n');
+
 			switch (opC) {
 			case 1: {
 				int confirmacao;
@@ -495,17 +706,19 @@ void Empresa::menu() {
 					cout << *cliTemp << endl << endl;
 
 					cout << "Confirma os dados?" << endl;
-					cout << "sim-----------1" << endl;
-					cout << "nao-----------2" << endl;
+					cout << "Sim-----------1" << endl;
+					cout << "Nao-----------2" << endl;
 					cin >> confirmacao;
+					cin.ignore(1000, '\n');
+
 					if (confirmacao == 1) {
 						novoCliente(cliTemp);
 						cout << "Cliente adicionado" << endl;
 						pause();
 					} else {
 						cout << "Deseja inserir os dados de novo?" << endl;
-						cout << "nao-----------1" << endl;
-						cout << "sim-----------2" << endl;
+						cout << "Nao-----------1" << endl;
+						cout << "Ŝim-----------2" << endl;
 						cin >> confirmacao;
 
 						pause();
@@ -519,26 +732,40 @@ void Empresa::menu() {
 
 				clear();
 				int numeracao, conf;
-				for (unsigned int i = 0; i < clientes.size(); i++) {
-					cout << i + 1 << "   " << clientes[i]->getNome() << endl;
-				}
+				do {
+					for (unsigned int i = 0; i < clientes.size(); i++) {
+						cout << i + 1 << "   " << clientes[i]->getNome()
+								<< endl;
+					}
 
-				cout << "Qual dos clientes deseja eliminar?" << endl;
-				cin >> numeracao;
+					cout << "Qual dos clientes deseja eliminar?" << endl;
+					cin >> numeracao;
+					cin.ignore(1000, '\n');
 
-				clear();
-				cout << *(clientes[numeracao - 1]) << endl;
-				cout << "Tem a certeza que quer apagar este cliente?" << endl;
-				cout << "Sim --------------------------------------------1"
-						<< endl;
-				cout << "Nao --------------------------------------------2"
-						<< endl;
-				cin >> conf;
-				if (conf == 1) {
-					removeCliente(numeracao - 1);
-					cout << "Cliente apagado do sistema" << endl;
-					pause();
-				}
+					clear();
+					cout << *(clientes[numeracao - 1]) << endl;
+					cout << "Tem a certeza que quer apagar este cliente?"
+							<< endl;
+					cout << "Sim --------------------------------------------1"
+							<< endl;
+					cout << "Nao --------------------------------------------2"
+							<< endl;
+					cin >> conf;
+					cin.ignore(1000, '\n');
+
+					if (conf == 1) {
+						removeCliente(numeracao - 1);
+						cout << "Cliente apagado do sistema" << endl;
+						pause();
+					} else {
+						cout << "Deseja inserir os dados de novo?" << endl;
+						cout << "Nao-----------1" << endl;
+						cout << "Sim-----------2" << endl;
+						cin >> conf;
+
+						pause();
+					}
+				} while (conf != 1);
 			}
 				break;
 
@@ -555,6 +782,8 @@ void Empresa::menu() {
 				}
 				cout << "Qual o cliente que deseja analisar?" << endl;
 				cin >> opcao;
+				cin.ignore(1000, '\n');
+
 				cout << *(clientes[opcao - 1]) << endl;
 				pause();
 			}
@@ -565,9 +794,183 @@ void Empresa::menu() {
 
 		case 3: { //Menu Veiculos
 			menuVeiculos();
-		}break;
+		}
+			break;
+		case 4: {		//Menu Servicos
+			clear();
+			int opS;
+			string datai, dataf, nome, descricao, precoe, duracaoe;
+			double preco, duracao;
+			cout << "**************Menu Servicos***********************" << endl
+					<< endl;
+			cout << "Adicionar Servico Standard----------------1" << endl;
+			cout << "Remover Servico Standard------------------2" << endl;
+			cout << "Modificar Servico Standard----------------3" << endl;
+			cout << "Listar Servicos Standard------------------4" << endl;
+			cout << "Adicionar Servico a veiculo---------------5" << endl;
+			cout << "Retirar Servico a veiculo-----------------6" << endl;
+			cout << "Sair---------------------------------0" << endl;
+			cin >> opS;
+			cin.ignore(1000, '\n');
+			clear();
 
+			switch (opS) {
+			case 1: {		// Adicionar Servico Standard
+				int conf;
+				do {
+					cout << "Insira data de inicio (XX-XX-XX)" << endl;
+					getline(cin, datai);
+					cout << "Insira data de fim (XX-XX-XX)" << endl;
+					getline(cin, dataf);
+					cout << "Insira nome do servico" << endl;
+					getline(cin, nome);
+					cout << "Insira descricao do servico" << endl;
+					getline(cin, descricao);
+					cout << "Insira preco por hora do servico" << endl;
+					getline(cin, precoe);
+					cout << "Insira duracao do servico" << endl;
+					getline(cin, duracaoe);
+					preco = atof(precoe.c_str());
+					duracao = atof(duracaoe.c_str());
+					Standard *s = new Standard(nome, descricao, preco, duracao,
+							datai, dataf);
+					cout << "Servico bem criado?" << endl;
+					cout << "Sim----------------1" << endl;
+					cout << "Nao----------------2" << endl;
+					cin >> conf;
+					if (conf == 1) {
+						novoStandard(s);
+					} else {
+						cout << "Deseja repetir os dados?" << endl;
+						cout << "Nao----------------1" << endl;
+						cout << "Sim----------------2" << endl;
+						cin >> conf;
+						cin.ignore(1000, '\n');
+					}
+				} while (conf != 1);
+
+			}
+				break;
+			case 2: { //Remover servicos standard
+				int serv;
+				int conf;
+				do {
+					for (unsigned int i = 0; i < standards.size(); i++) {
+						cout << i + 1 << "  " << standards[i]->getNome()
+								<< endl;
+					}
+
+					cout << "Qual o servico que deseja remover?" << endl;
+					cin >> serv;
+					cin.ignore(1000, '\n');
+					cout << "Tem a certeza que quer remover o Servico "
+							<< standards[serv - 1]->getNome() << endl;
+					cout << "Sim----------------1" << endl;
+					cout << "Nao----------------2" << endl;
+					cin >> conf;
+					if (conf == 1) {
+						removeStandard(serv - 1);
+
+					} else {
+						cout << "Deseja eliminar outro servico?" << endl;
+						cout << "Nao----------------1" << endl;
+						cout << "Sim----------------2" << endl;
+						cin >> conf;
+
+					}
+				} while (conf != 1);
+			}
+				break;
+
+			case 3: { //Modifica servico standard
+				modificaServ();
+
+			}
+				break;
+
+			case 4: { //Lista servicos
+				clear();
+				int opcao;
+				for (unsigned int i = 0; i < standards.size(); i++) {
+					cout << i + 1 << "  " << standards[i]->getNome() << endl;
+				}
+
+				cout << "Qual o servico que deseja analisar?" << endl;
+				cin >> opcao;
+				cin.ignore(1000, '\n');
+
+				cout << *(standards[opcao - 1]) << endl;
+
+			}
+				break;
+
+			case 5: { // adicionar servico ao veiculo
+				clear();
+				int opcao, opcao2, opcao3;
+				cout << "A que veiculo deseja adicionar o servico?" << endl;
+				for (unsigned int i = 0; i < veiculos.size(); i++) {
+					cout << i + 1 << "  " << veiculos[i]->getMarca() << endl;
+				}
+				cin >> opcao;
+
+				cout << "Deseja acrescentar um servico standart " << endl;
+				cout << "Sim----------------1" << endl;
+				cout << "Nao----------------2" << endl;
+				cin >> opcao2;
+				cin.ignore(1000, '\n');
+
+				if (opcao2 == 1) {
+					cout << "Que servico deseja adicionar?" << endl;
+					for (unsigned int i = 0; i < standards.size(); i++) {
+						cout << i + 1 << "  " << standards[i]->getNome()
+								<< endl;
+					}
+					cin >> opcao3;
+					veiculos[opcao - 1]->novoStandard(standards[opcao3 - 1]);
+				} else if (opcao2 == 2) {
+					int conf;
+					do {
+						cout << "Insira data de inicio (XX-XX-XX)" << endl;
+						getline(cin, datai);
+						cout << "Insira data de fim (XX-XX-XX)" << endl;
+						getline(cin, dataf);
+						cout << "Insira nome do servico" << endl;
+						getline(cin, nome);
+						cout << "Insira descricao do servico" << endl;
+						getline(cin, descricao);
+						cout << "Insira preco por hora do servico" << endl;
+						getline(cin, precoe);
+						cout << "Insira duracao do servico" << endl;
+						getline(cin, duracaoe);
+						preco = atof(precoe.c_str());
+						duracao = atof(duracaoe.c_str());
+						Standard *s = new Standard(nome, descricao, preco,
+								duracao, datai, dataf);
+						cout << "Servico bem criado?" << endl;
+						cout << "Sim----------------1" << endl;
+						cout << "Nao----------------2" << endl;
+						cin >> conf;
+						if (conf == 1) {
+							veiculos[opcao - 1]->novoStandard(s);
+
+						} else {
+							cout << "Deseja repetir os dados?" << endl;
+							cout << "Nao----------------1" << endl;
+							cout << "Sim----------------2" << endl;
+							cin >> conf;
+							cin.ignore(1000, '\n');
+						}
+					} while (conf != 1);
+				}
+			}
+				break;
+
+			}
+			pause();
+		} //fim menu servicos
+			break;
 		case 0: {
+			escreveStandards();
 			escreveClientes();
 			escreveFuncionarios();
 			escreveBuses();
@@ -589,6 +992,7 @@ void Empresa::modificaFunc() {
 
 	cout << "Qual o funcionario que deseja modificar" << endl;
 	cin >> numeracao;
+	cin.ignore(1000, '\n');
 
 	clear();
 	cout << *(funcionarios[numeracao - 1]) << endl;
@@ -629,6 +1033,7 @@ void Empresa::modificaFunc() {
 	}
 		break;
 	case 3: {
+		clear();
 		string morada;
 		cout << "Qual a nova morada?" << endl;
 		getline(cin, morada);
@@ -638,6 +1043,7 @@ void Empresa::modificaFunc() {
 	}
 		break;
 	case 4: {
+		clear();
 		string temp;
 		int horasEx;
 		cout << "Qual o numero das horas extra?" << endl;
@@ -649,6 +1055,7 @@ void Empresa::modificaFunc() {
 	}
 		break;
 	case 5: {
+		clear();
 		string temp;
 		int salario;
 		cout << "Qual o novo salario?" << endl;
@@ -660,6 +1067,7 @@ void Empresa::modificaFunc() {
 	}
 		break;
 	case 6: {
+		clear();
 		string especializacao;
 		cout << "Qual a nova especializacao?" << endl;
 		getline(cin, especializacao);
@@ -669,24 +1077,30 @@ void Empresa::modificaFunc() {
 	}
 		break;
 	case 7: {
+		clear();
 		int opcao, nrvei;
-
 		cout << "Adicionar veiculo--------1" << endl;
 		cout << "Remover veiculo----------2" << endl;
 		cin >> opcao;
+		cin.ignore(1000, '\n');
+
 		if (opcao == 1) {
+			clear();
 			cout << "Veiculos disponiveis para adicionar" << endl;
 			for (unsigned int i = 0; i < veiculos.size(); i++) {
 				cout << i + 1 << "   " << veiculos[i]->getMarca() << endl;
 			}
 			cout << "Selecione veiculo para adicionar" << endl;
 			cin >> nrvei;
+			cin.ignore(1000, '\n');
+
 			funcionarios[numeracao - 1]->adicionaVeiculo(veiculos[nrvei - 1]);
 			cout << "Veiculo adicionado com sucesso" << endl;
 			pause();
 
 		} else {
 			if (opcao == 2) {
+				clear();
 				cout << "Veiculos do funcionario para remover" << endl;
 				for (unsigned int i = 0;
 						i < funcionarios[numeracao - 1]->getVeiculos().size();
@@ -697,6 +1111,8 @@ void Empresa::modificaFunc() {
 				}
 				cout << "Selecione veiculo para retirar" << endl;
 				cin >> nrvei;
+				cin.ignore(1000, '\n');
+
 				funcionarios[numeracao - 1]->removeVeiculo(nrvei - 1);
 				cout << "Veiculo removido com sucesso" << endl;
 				pause();
@@ -717,6 +1133,7 @@ void Empresa::modificaFunc() {
 }
 
 void Empresa::modificaCli() {
+
 	clear();
 	int indice, temp;
 	for (unsigned int i = 0; i < clientes.size(); i++) {
@@ -724,6 +1141,8 @@ void Empresa::modificaCli() {
 	}
 	cout << "Qual o cliente que deseja modificar?" << endl;
 	cin >> indice;
+	cin.ignore(1000, '\n');
+
 	clear();
 	cout << *(clientes[indice - 1]) << endl;
 	pause();
@@ -735,6 +1154,7 @@ void Empresa::modificaCli() {
 	cout << "Sair-----------------0" << endl;
 	cin >> temp;
 	cin.ignore(1000, '\n');
+
 	switch (temp) {
 	case 1: {
 		clear();
@@ -776,6 +1196,7 @@ void Empresa::modificaCli() {
 }
 
 void Empresa::menuVeiculos() {
+	clear();
 	int opcao;
 	cout << "Seleccione uma opcão:" << endl;
 	cout << "Adicionar Veiculo----------1" << endl;
@@ -784,11 +1205,13 @@ void Empresa::menuVeiculos() {
 	cout << "Listar Veiculos------------4" << endl;
 	cout << "Sair ----------------------0" << endl;
 	cin >> opcao;
+	cin.ignore(1000, '\n');
 
 	switch (opcao) {
 
 	case 1: {
 		clear();
+
 		int i;
 		string marca, modelo, matricula, tipo;
 		cout << "Tipo de veiculo " << endl;
@@ -812,6 +1235,7 @@ void Empresa::menuVeiculos() {
 			getline(cin, tipo);
 
 			Carro *c = new Carro(marca, modelo, matricula, tipo);
+			veiculos.push_back(c);
 			novoCarro(c);
 			pause();
 
@@ -829,6 +1253,7 @@ void Empresa::menuVeiculos() {
 			getline(cin, tipo);
 
 			Camiao *c = new Camiao(marca, modelo, matricula, tipo);
+			veiculos.push_back(c);
 			novoCamiao(c);
 			pause();
 
@@ -845,6 +1270,7 @@ void Empresa::menuVeiculos() {
 			cout << "Insira Matricula (XX-XX-XX)" << endl;
 			getline(cin, matricula);
 			Bus *b = new Bus(marca, modelo, matricula);
+			veiculos.push_back(b);
 			novoBus(b);
 			pause();
 		}
@@ -856,41 +1282,53 @@ void Empresa::menuVeiculos() {
 		break;
 
 	case 2: {
+		clear();
 		int opcao, temp;
 		cout << "Insira tipo que deseja remover" << endl;
 		cout << "Carro-------------------1" << endl;
 		cout << "Camiao------------------2" << endl;
 		cout << "Bus---------------------3" << endl;
 		cout << "Sair--------------------0" << endl;
-		cin >>opcao;
+		cin >> opcao;
+		cin.ignore(1000, '\n');
+
 		switch (opcao) {
 		case 1: {
+			clear();
 			for (unsigned int i = 0; i < carros.size(); i++) {
 				cout << i + 1 << "   " << carros[i]->getMarca() << endl;
 			}
 			cout << "Selecione o carro que deseja eliminar" << endl;
 			cin >> temp;
+			cin.ignore(1000, '\n');
+
 			removeCarro(temp - 1);
 			pause();
 		}
 			break;
 		case 2: {
+			clear();
 			for (unsigned int i = 0; i < camioes.size(); i++) {
 				cout << i + 1 << "   " << camioes[i]->getMarca() << endl;
 			}
 			cout << "Selecione o camiao que deseja eliminar" << endl;
 			cin >> temp;
+			cin.ignore(1000, '\n');
+
 			removeCamiao(temp - 1);
 			pause();
 		}
 			break;
 
 		case 3: {
+			clear();
 			for (unsigned int i = 0; i < buses.size(); i++) {
 				cout << i + 1 << "   " << buses[i]->getMarca() << endl;
 			}
 			cout << "Selecione o bus que deseja eliminar" << endl;
 			cin >> temp;
+			cin.ignore(1000, '\n');
+
 			removeBus(temp - 1);
 			pause();
 		}
@@ -921,52 +1359,65 @@ void Empresa::menuVeiculos() {
 
 		switch (op) {
 		case 1: { // listar carros
+			clear();
 			for (unsigned int i = 0; i < carros.size(); i++) {
 				cout << i + 1 << "  " << carros[i]->getMarca() << endl;
 			}
 			cout << "Que carro deseja analizar?" << endl;
 			cin >> car;
+			cin.ignore(1000, '\n');
+
 			cout << *(carros[car - 1]) << endl;
+			listaVeiculosServicos(carros[car - 1]);
 			pause();
 
 		}
 			break;
 		case 2: { //listar camioes
+			clear();
 			for (unsigned int i = 0; i < camioes.size(); i++) {
 				cout << i + 1 << "  " << camioes[i]->getMarca() << endl;
 			}
 			cout << "Que camiao deseja analizar?" << endl;
 			cin >> car;
+			cin.ignore(1000, '\n');
 			cout << *(camioes[car - 1]) << endl;
+			listaVeiculosServicos(camioes[car - 1]);
 			pause();
 
 		}
 			break;
 		case 3: { // listar buses
-
+			clear();
 			for (unsigned int i = 0; i < buses.size(); i++) {
 				cout << i + 1 << "  " << buses[i]->getMarca() << endl;
 			}
 			cout << "Que bus deseja analizar?" << endl;
 			cin >> car;
+			cin.ignore(1000, '\n');
 			cout << *(buses[car - 1]) << endl;
+			listaVeiculosServicos(buses[car - 1]);
 			pause();
 
 		}
 			break;
+
 		case 4: { //listar todos
+			clear();
 			for (unsigned int i = 0; i < veiculos.size(); i++) {
 				cout << i + 1 << "  " << veiculos[i]->getMarca() << endl;
 			}
 			cout << "Que veiculo deseja analizar?" << endl;
 			cin >> car;
+			cin.ignore(1000, '\n');
 			cout << *(veiculos[car - 1]) << endl;
 			pause();
 		}
 			break;
-		case 0:{
+		case 0: {
 
-		}break;
+		}
+			break;
 
 		}
 
@@ -977,6 +1428,7 @@ void Empresa::menuVeiculos() {
 
 }
 
+//Case 3 do Menu Veiculos
 void Empresa::modificaVeic() {
 	clear();
 	string marca, modelo, matricula, categoria;
@@ -987,14 +1439,19 @@ void Empresa::modificaVeic() {
 	cout << "Bus-------------------------------3" << endl;
 	cout << "Sair------------------------------0" << endl;
 	cin >> indice;
+	cin.ignore(1000, '\n');
+
 	switch (indice) {
 	case 1: {
+		clear();
 		int op, nCarro;
 		for (unsigned int i = 0; i < carros.size(); i++) {
 			cout << i + 1 << "   " << carros[i]->getMarca() << endl;
 		}
 		cout << "Insira carro que deseja alterar" << endl;
 		cin >> nCarro;
+		cin.ignore(1000, '\n');
+
 		cout << "Que atributo deseja alterar?" << endl;
 		cout << "Marca------------------------1" << endl;
 		cout << "Modelo-----------------------2" << endl;
@@ -1002,7 +1459,10 @@ void Empresa::modificaVeic() {
 		cout << "Categoria--------------------4" << endl;
 		cout << "Sair-------------------------0" << endl;
 		cin >> op;
-		cin.ignore(1000,'\n');
+		cin.ignore(1000, '\n');
+
+		clear();
+
 		switch (op) {
 		case 1: {
 			cout << "Insira nova marca" << endl;
@@ -1034,15 +1494,19 @@ void Empresa::modificaVeic() {
 		}
 			break;
 		}
+		pause();
 	}
 		break;
 	case 2: { /*modificar camioes*/
+
 		int op, nCarro;
 		for (unsigned int i = 0; i < camioes.size(); i++) {
 			cout << i + 1 << "   " << camioes[i]->getMarca() << endl;
 		}
 		cout << "Insira camiao que deseja alterar" << endl;
 		cin >> nCarro;
+		cin.ignore(1000, '\n');
+
 		cout << "Que atributo deseja alterar?" << endl;
 		cout << "Marca------------------------1" << endl;
 		cout << "Modelo-----------------------2" << endl;
@@ -1050,7 +1514,9 @@ void Empresa::modificaVeic() {
 		cout << "Categoria--------------------4" << endl;
 		cout << "Sair-------------------------0" << endl;
 		cin >> op;
-		cin.ignore(1000,'\n');
+		cin.ignore(1000, '\n');
+
+		clear();
 		switch (op) {
 		case 1: {
 			cout << "Insira nova marca" << endl;
@@ -1082,16 +1548,21 @@ void Empresa::modificaVeic() {
 		}
 			break;
 		}
+		pause();
 	}
 		break;
 
 	case 3: { /*Modifica bus  */
+		clear();
+
 		int opcao, nBus;
 		for (unsigned int i = 0; i < buses.size(); i++) {
 			cout << i + 1 << "   " << buses[i]->getMarca() << endl;
 		}
 		cout << "Selecione qual o bus que deseja modificar" << endl;
 		cin >> nBus;
+		cin.ignore(1000, '\n');
+
 		clear();
 		cout << "Que atributo deseja alterar?" << endl;
 		cout << "Marca------------------------1" << endl;
@@ -1099,7 +1570,10 @@ void Empresa::modificaVeic() {
 		cout << "Matricula--------------------3" << endl;
 		cout << "Sair-------------------------0" << endl;
 		cin >> opcao;
-		cin.ignore(1000,'\n');
+		cin.ignore(1000, '\n');
+
+		clear();
+
 		switch (opcao) {
 		case 1: {
 			cout << "Insira nova marca" << endl;
@@ -1127,9 +1601,129 @@ void Empresa::modificaVeic() {
 			break;
 
 		}
+		pause();
 		break;
 
 	}
 		break;
 	}
 }
+
+void Empresa::modificaServ() {
+	clear();
+	int escolha, opS;
+	for (unsigned int i = 0; i < standards.size(); i++) {
+		cout << i + 1 << "  " << standards[i]->getNome() << endl;
+	}
+	string nome, descricao, dataI, dataF, precoe, duracaoe;
+	double preco, duracao;
+
+	cout << "Qual dos servicos deseja alterar?" << endl;
+	cin >> escolha;
+	cin.ignore(1000, '\n');
+
+	cout << "Que atributo deseja alterar?" << endl;
+	cout << "Data de inicio---------------------1" << endl;
+	cout << "Data de fim------------------------2" << endl;
+	cout << "Nome-------------------------------3" << endl;
+	cout << "Descricao--------------------------4" << endl;
+	cout << "Preco por hora---------------------5" << endl;
+	cout << "Duracao----------------------------6" << endl;
+	cout << "Sair-------------------------------0" << endl;
+	cin >> opS;
+	cin.ignore(1000, '\n');
+
+	clear();
+	switch (opS) {
+
+	case 1: {
+		cout << "Insira nova Data de inicio " << endl;
+		getline(cin, dataI);
+		standards[escolha - 1]->setDataInicio(dataI);
+
+	}
+		break;
+
+	case 2: {
+		cout << "Insira nova Data de fim " << endl;
+		getline(cin, dataF);
+		cin.ignore(1000, '\n');
+		standards[escolha - 1]->setDataFim(dataF);
+	}
+		break;
+
+	case 3: {
+		cout << "Insira novo Nome " << endl;
+		getline(cin, nome);
+		cin.ignore(1000, '\n');
+		standards[escolha - 1]->setNome(nome);
+	}
+		break;
+
+	case 4: {
+		cout << "Insira nova Descricao " << endl;
+		getline(cin, descricao);
+		cin.ignore(1000, '\n');
+		standards[escolha - 1]->setDescricao(descricao);
+	}
+		break;
+
+	case 5: {
+		cout << "Insira novo Preco " << endl;
+		getline(cin, precoe);
+		cin.ignore(1000, '\n');
+		preco = atof(precoe.c_str());
+		standards[escolha - 1]->setPreco(preco);
+	}
+		break;
+
+	case 6: {
+		cout << "Insira nova Duracao (Em horas) " << endl;
+		getline(cin, duracaoe);
+		cin.ignore(1000, '\n');
+		duracao = atof(duracaoe.c_str());
+		standards[escolha - 1]->setDuracao(duracao);
+	}
+		break;
+
+	case 0: {
+
+	}
+		break;
+	} //fecha primeiro switch
+
+}
+
+void Empresa::listaVeiculosServicos(Veiculo *v) {
+	int opcao;
+	cout << "Deseja listar os servicos associados a este veiculo?" << endl;
+	cout << "Sim-------------------1" << endl;
+	cout << "Nao-------------------2" << endl;
+	cin >> opcao;
+
+	if (opcao == 1) {
+		for (unsigned int i = 0; i < v->getStandards().size(); i++) {
+			cout << *(v->getStandards()[i]) << endl;
+		}
+
+	}
+}
+
+void Empresa::adicionaVeiculoFuncionario() {
+	int opcao, opcao2;
+	cout << "Qual o Funcionario?" << endl;
+	for (unsigned int i = 0; i < funcionarios.size(); i++) {
+		cout << i + 1 << "   " << funcionarios[i]->getNome() << endl;
+	}
+	cin >> opcao;
+
+	cout << "Qual o veiculo que quer adicionar? " << endl;
+	for (unsigned int i = 0; i < veiculos.size(); i++) {
+		cout << i + 1 << "   " << veiculos[i]->getMarca() << endl;
+	}
+	cin >> opcao2;
+
+	funcionarios[opcao - 1]->adicionaVeiculo(veiculos[opcao2 - 1]);
+
+}
+

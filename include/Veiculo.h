@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <Standart.h>
 using namespace std;
 
 
@@ -22,6 +22,7 @@ private:
   string marca;
   string modelo;
   string matricula;
+  vector<Standard *> standards;
 public:
   Veiculo();
   Veiculo(string mc, string mdl, string mt);
@@ -34,9 +35,15 @@ public:
   void setID(int id);
   void setMarca (string mc);
   void setModelo (string mdl);
+  void novoStandard(Standard * s);
+  void removeStandard(int indice);
   void setMatricula (string mt);
+  vector<Standard *> getStandards();
   friend ostream & operator<<(ostream & o, const Veiculo & v);
  // int readFile(ofstream * file);
+
+  void setStandards(vector<Standard*> standards);
+
 
   virtual
   ~Veiculo();
