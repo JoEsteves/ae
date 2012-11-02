@@ -1,8 +1,8 @@
 #include "Servico.h"
 
 Servico::Servico(string data_inicio, string data_fim) {
-	this->data_inicio = data_inicio;
-	this->data_fim = data_fim;
+	this->dataInicio = dataInicio;
+	this->dataFim = dataFim;
 }
 
 Servico::~Servico() {
@@ -10,17 +10,17 @@ Servico::~Servico() {
 }
 
 string Servico::getDataInicio() const {
-	return data_inicio;
+	return dataInicio;
 }
 
 string Servico::getDataFim() const {
-	return data_fim;
+	return dataFim;
 }
 
 void Servico::setDataInicio(string data) {
-	data_inicio = data;
+	dataInicio = data;
 }
 
 void Servico::setDataFim(string data) {
-	data_fim = data;
+	dataFim = data;
 }

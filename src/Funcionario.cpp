@@ -88,7 +88,6 @@ ostream& operator<< (ostream &out, const Funcionario &func){
 	out << "Contacto: " << func.contacto << endl;
 	out << "Morada: " << func.morada << endl;
 
-	out << "Id: " << func.getId() << endl;
 	out << "Tipo: " << func.getTipo() << endl;
 	out << "Salario: " << func.getSalario() << endl;
 	out << "Numero horas extra: " << func.getHorasExtra() << endl;

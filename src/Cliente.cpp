@@ -17,13 +17,7 @@ Cliente::~Cliente(){
 
 }
 
-int Cliente::getId() const {
-	return id; }
-
-void Cliente::setId(int id){
-	this->id=id;
-}
-
+/*
 vector<Veiculo*> Cliente::getVeiculos() const {
 	return veiculos;
 }
@@ -31,7 +25,7 @@ vector<Veiculo*> Cliente::getVeiculos() const {
 void Cliente::setVeiculos(vector <Veiculo*> veiculos){
 	this->veiculos=veiculos;
 }
-
+*/
 
 
 

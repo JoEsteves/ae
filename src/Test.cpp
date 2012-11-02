@@ -6,8 +6,6 @@
 #include "Carro.h"
 #include "Camiao.h"
 #include "Bus.h"
-#include "Frota.h"
-#include "Menu.h"
 
 //TODO remover ids dos construtores
 /*
@@ -46,7 +44,7 @@ void test_frota_size() {
 
 void runSuite(){
   cute::suite s;
-  //TODO add your test here
+  //TODO Paulo: add your test here
   s.push_back(CUTE(createVehicle_Test));
   s.push_back(CUTE(test_frota_size));
   cute::ide_listener lis;
