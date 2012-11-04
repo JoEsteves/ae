@@ -76,6 +76,7 @@ void Funcionario::adicionaVeiculo(Veiculo * v){
 	veiculos.push_back(v);
 }
 
+
 void Funcionario::removeVeiculo(int indice){
 	veiculos.erase(veiculos.begin()+indice);
 }

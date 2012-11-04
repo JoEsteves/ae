@@ -88,6 +88,9 @@ public:
 	void leStandards();
 
 	void adicionaVeiculoFuncionario();
+	void removeVeiculoFuncionario();
+	void removeServicoVeiculo();
+
 
 	void listaVeiculosServicos(Veiculo *v);
 

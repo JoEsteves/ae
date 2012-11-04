@@ -15,15 +15,13 @@
 #include "Funcionario.h"
 #include "Cliente.h"
 #include "Pessoa.h"
+
 #include "Empresa.h"
 
 using namespace std;
 
 int main(){
 	Empresa *emp = new Empresa();
-
-
-
 
 	emp->menu();
 

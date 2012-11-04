@@ -79,5 +79,3 @@ vector<Standard *> Veiculo::getStandards(){
 void Veiculo::setStandards(vector<Standard*> standards){
 	this->standards=standards;
 }
-
-
